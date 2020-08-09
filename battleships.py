@@ -109,6 +109,8 @@ while playerHitCount < 19 and CPUhitCount < 19:
     else:
         print('Miss!')
         print()
+    if playerHitCount == 19:
+        break
 
     print("--- Computer's turn ---")
     print()
@@ -124,7 +126,6 @@ while playerHitCount < 19 and CPUhitCount < 19:
     else:
         print('Miss!')
         print()
-
 
 if playerHitCount == 19:    
     print('You won!')
