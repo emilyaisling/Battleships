@@ -1,13 +1,26 @@
-CPUboard = [[1, 1, 1, 1, 0, 0, 0, 0, 1, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 0, 1, 1, 1, 0, 0],
-        [1, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 1, 0, 0, 0, 0, 0, 0]]
+import random, time
+
+CPUboard2 = [[1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+            [1, 1, 0, 0, 0, 1, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
+            [0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [0, 0, 0, 0, 0, 0, 1, 1, 0, 0],
+            [1, 1, 1, 0, 0, 0, 0, 0, 0, 0]]
+
+CPUboard1 = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
 
 playerBoard1 = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -19,6 +32,17 @@ playerBoard1 = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+
+playerBoard2 = [[1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 1, 1, 1, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [1, 1, 1, 0, 0, 1, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 1, 0, 0, 1, 0],
+                [0, 0, 0, 0, 0, 1, 0, 0, 1, 0],
+                [0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+                [1, 1, 1, 1, 0, 0, 0, 0, 0, 0]]
 
 coords = {'A1': [0, 0], 'B1': [0, 1], 'C1': [0,2], 'D1': [0, 3], 'E1': [0, 4], 'F1': [0, 5], 'G1': [0, 6], 'H1': [0, 7], 'I1': [0, 8],
           'J1': [0, 9], 'A2': [1, 0], 'B2': [1, 1], 'C2': [1, 2], 'D2': [1, 3], 'E2': [1, 4], 'F2': [1, 5], 'G2': [1, 6], 'H2': [1, 7],
@@ -49,20 +73,63 @@ def printBoard(board):
             else:
                 print(board[y][x])
 
-#ask for player coord guess
-printBoard(playerBoard1)
-print('Enter a coordinate:')
-guess = input().upper()
-print(CPUboard[coords[guess][0]][coords[guess][1]])
+playerHitCount = 0
+CPUhitCount = 0
 
-#check for ship
-if CPUboard[coords[guess][0]][coords[guess][1]] == 1:
-    print('Hit!')
-    playerBoard1[coords[guess][0]][coords[guess][1]] = 'x'
-    CPUboard[coords[guess][0]][coords[guess][1]] = 0
+print('''
+=====================================
+
+---------- BATTLESHIPS --------------
+
+------- PLAYER VS COMPUTER ----------
+
+=====================================
+''')
+
+while playerHitCount < 19 and CPUhitCount < 19:
+    print("--- Player's turn ---")
+    print()
     printBoard(playerBoard1)
-else:
-    print('Miss!')
+    print()
+    printBoard(playerBoard2)
+    print()
+    print('Enter a coordinate:')
+    playerGuess = input().upper()
+    if len(playerGuess) > 3 or playerGuess[0].isalpha() == False or playerGuess[1].isdigit() == False:
+        print('Invalid input')
+        continue
+
+    #check for ship
+    if CPUboard2[coords[playerGuess][0]][coords[playerGuess][1]] == 1:
+        print('Hit!')
+        print()
+        playerBoard1[coords[playerGuess][0]][coords[playerGuess][1]] = 'x'
+        playerHitCount += 1
+        CPUboard2[coords[playerGuess][0]][coords[playerGuess][1]] = 'x'
+    else:
+        print('Miss!')
+        print()
+
+    print("--- Computer's turn ---")
+    print()
+    time.sleep(2)
+    CPUguess, CPUcoords = random.choice(list(coords.items()))
+    print(CPUguess)
+    if playerBoard2[CPUcoords[0]][CPUcoords[1]] == 1:
+        print('Hit!')
+        print()
+        CPUboard1[CPUcoords[0]][CPUcoords[1]] = 'x'
+        CPUhitCount += 1
+        playerBoard2[CPUcoords[0]][CPUcoords[1]] = 'x'
+    else:
+        print('Miss!')
+        print()
+
+
+if playerHitCount == 19:    
+    print('You won!')
+elif CPUhitCount == 19:
+    print('You lost!')
 
 
 
